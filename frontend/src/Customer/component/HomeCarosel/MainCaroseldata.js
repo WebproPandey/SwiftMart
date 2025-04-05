@@ -1,6 +1,6 @@
-import caro1 from "../../../assets/caro1.jpg";
-import caro2 from "../../../assets/caro2.jpg";
-import caro3 from "../../../assets/caro3.jpg";
+import caro1 from "../../../assets/caro1.png";
+import caro2 from "../../../assets/caro2.png";
+import caro3 from "../../../assets/caro3.png";
 import caro4 from "../../../assets/caro4.jpg";
 import caro5 from "../../../assets/caro5.jpg";
 

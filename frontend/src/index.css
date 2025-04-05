@@ -15,3 +15,13 @@
 .alice-carousel__dots{
     margin: 0px 0px !important ;
 } */
+
+.Navigation{
+    z-index: 9999 !important;
+    position: sticky !important;
+    width: 100%;
+}
+
+.Navigationdialog{
+    z-index: 99999 !important;
+}

@@ -1,14 +1,19 @@
 import React from 'react'
-import Navigation from './Customer/component/Navigation'
+import Navigation from './Customer/component/Navigation/Navigation'
 import HomePages from './Customer/pages/HomePage/HomePages'
+import Fotter from './Customer/Fotter/Fotter'
+import Products from './Customer/component/products/Products'
 
 const App = () => {
   return (
-    <div>
+    <div className='relative'>
       <Navigation/>
       <div>
-        <HomePages/>
+        {/* <HomePages/> */}
+        <Products/>
       </div>
+      <Fotter/>
+      
     </div>
   )
 }

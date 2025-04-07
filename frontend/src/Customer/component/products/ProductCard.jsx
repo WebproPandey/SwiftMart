@@ -74,42 +74,44 @@ const products = [
     // More products...
   ]
   
-  export default function ProductCard() {
-    return (
-      <div className="bg-white ">
-        <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6  lg:max-w-7xl lg:px-8 ">
+export default function ProductCard({product}) {
+  return (
+            <div
+              key={product.id}
+              className="group relative bg-gray-800 flex justify-center items-end lg:aspect-auto  h-[60vh] hover:shadow-lg transition duration-300 ease-in-out overflow-hidden rounded-md"
+            >
+              {/* Image with smooth hover animation */}
+              <div className="absolute top-0  w-[100%]    group-hover:h-[80%] h-[70%]      z-10 transition-all duration-100 ease-in-out">
 
-          <div className="grid grid-cols-1 gap-x-6  gap-y-6   sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-            {products.map((product) => (
-              <div key={product.id} className="group relative bg-gray-300">
-                <img
-                  alt={product.imageAlt}
-                  src={product.imageSrc}
-                  className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-[45vh]"
-                />
-                <div className="mt-4 flex justify-between px-4">
-                  <div>
-                    <h3 className=" text-[1.4vw] font-medium text-black">
-                      <a href={product.href}>
-                        <span aria-hidden="true" className="absolute " />
-                        {product.name}
-                      </a>
-                    </h3>
-                    <p className="mt-1 text-md font-normal text-black">{product.color}</p>
-                    <p className="text-sm font-medium text-gray-900">
+              <img
+                alt={product.title}
+                src={product.imageUrl}
+                className="aspect-square w-full h-full bg-gray-500   object-cover object-top group-hover:scale-105 transition-transform duration-300 ease-in-out"
+              />
+              </div>
+
+
+              {/* Product details with smooth hover animation */}
+              <div className="mt-4 flex justify-between px-4 py-2 z-20 bg-gray-200 rounded-md w-full  lg:h-[20vh] group-hover:h-[25vh]  transition-all duration-100 ease-in-out">
+                <div>
+                  <h3 className="md:text-[1.5vw] lg:text-[1.4vw] font-medium text-black/80  capitalize">
+                      {product.brand}
+                  </h3>
+                  <h3 className="md:text-[1.5vw] lg:text-[1vw] font-medium text-black truncate">
+                      {product.title}
+                  </h3>
+                  <p className="mt-1 text-md font-normal text-black">{product.color}</p>
+                  <p className="text-sm font-medium text-gray-900">
                     <span className="text-gray-500 mr-2">{product.price}</span>
-                    <span className="line-through text-gray-500 mr-2">{product.price}</span>
-                    <span className="text-green-600">
-                      ${((parseFloat(product.price.replace('$', '')) * 0.95).toFixed(2))}
-                    </span>
+                    <span className="line-through text-gray-500 mr-2">{product.discountedPrice}</span>
+                    <span className=" text-green-500 mr-2">{product.discountPersent} % off</span>
+                   
                   </p>
-                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    )
-  }
-  
+
+              {/* Add a subtle scale effect on hover */}
+              <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></div>
+            </div>
+  );
+}

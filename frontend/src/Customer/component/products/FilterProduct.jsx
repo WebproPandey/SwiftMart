@@ -16,6 +16,9 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import ProductCard from './ProductCard'
 
+import {mens_kurta} from '../../../Data/mens_kurta'
+import { filters, singleFilter } from './filterProducts'
+
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
@@ -24,82 +27,62 @@ const sortOptions = [
   { name: 'Price: High to Low', href: '#', current: false },
 ]
 
-const filters = [
-  {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-  {
-    id:'price',
-    name:'Price',
-    options:[
-      {value:'10',label:'$10',checked:false},
-      {value:'20',label:'$20',checked:false},
-      {value:'30',label:'$30',checked:false},
-      {value:'40',label:'$40',checked:false},
-      {value:'50',label:'$50',checked:true},
-    ]
-  },
-  {
-   id:"discount Range",
-    name:"Discount Range",
-    options:[
-      {value:'0-10',label:'0% - 10%',checked:false},
-      {value:'10-20',label:'10% - 20%',checked:true},
-      {value:'20-30',label:'20% - 30%',checked:false},
-      {value:'30-40',label:'30% - 40%',checked:false},
-      {value:'40-50',label:'40% - 50%',checked:false},
-    ]
-  },
-  {
-    id:"availability",
-    name:"Availability",
-    options:[
-      {value:'in-stock',label:'In Stock',checked:false},
-      {value:'out-of-stock',label:'Out of Stock',checked:true},
-      {value:'pre-order',label:'Pre Order',checked:false},
-    ]
-  }
-]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+import { useLocation, useNavigate } from 'react-router-dom'
+
+
+
 export default function FilterProduct() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-
+  const  location = useLocation()
+  const navigate = useNavigate()
+  const handleFilter = (value, sectionId) => {
+    const searchParams = new URLSearchParams(location.search);
+    let filter = searchParams.getAll(sectionId);
+  
+    if (filter.length > 0 && filter[0].split(",").includes(value)) {
+      filter = filter[0].split(",").filter((item) => item !== value);
+      if (filter.length === 0) {
+        searchParams.delete(sectionId);
+      } else {
+        searchParams.set(sectionId, filter.join(","));
+      }
+    } else {
+      filter.push(value);
+      searchParams.set(sectionId, filter.join(","));
+    }
+  
+    navigate(`?${searchParams.toString()}`);
+  };
+  
+  const handleFilterSingle = (e, sectionId) => {
+    const searchParams = new URLSearchParams(location.search);
+  
+    // If the user unchecks the option, remove the query parameter
+    if (!e.target.checked) {
+      searchParams.delete(sectionId);
+    } else {
+      // Set the new value for the sectionId
+      searchParams.set(sectionId, e.target.value);
+    }
+  
+    // Update the URL with the new query parameters
+    const query = searchParams.toString();
+    navigate({ search: `?${query}` });
+  
+    // Uncheck all other options in the same section
+    const inputs = document.querySelectorAll(`input[name="${sectionId}[]"]`);
+    inputs.forEach((input) => {
+      if (input !== e.target) {
+        input.checked = false;
+      }
+    });
+  };
   return (
     <div className="w-full  relative ">
       <div>
@@ -151,6 +134,7 @@ export default function FilterProduct() {
                                   id={`filter-mobile-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   type="checkbox"
+                                  onChange={(e) => handleFilter(option.value, section.id)}
                                   className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                 />
                                 <svg
@@ -187,6 +171,66 @@ export default function FilterProduct() {
                     </DisclosurePanel>
                   </Disclosure>
                 ))}
+                {singleFilter.map((section) => (
+                  <Disclosure key={section.id} as="div" className="border-t border-gray-200 px-4 py-6">
+                    <h3 className="-mx-2 -my-3 flow-root">
+                      <DisclosureButton className="group flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
+                        <span className="font-medium text-gray-900">{section.name}</span>
+                        <span className="ml-6 flex items-center">
+                          <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
+                          <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                        </span>
+                      </DisclosureButton>
+                    </h3>
+                    <DisclosurePanel className="pt-6">
+                      <div className="space-y-6">
+                        {section.options.map((option, optionIdx) => (
+                          <div key={option.value} className="flex gap-3">
+                            <div className="flex h-5 shrink-0 items-center">
+                              <div className="group grid size-4 grid-cols-1">
+                                <input
+                                  defaultValue={option.value}
+                                  id={`filter-mobile-${section.id}-${optionIdx}`}
+                                  name={`${section.id}[]`}
+                                  type="checkbox"
+                                  onChange={(e) => handleFilterSingle(e, section.id)}
+                                  className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                />
+                                <svg
+                                  fill="none"
+                                  viewBox="0 0 14 14"
+                                  className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+                                >
+                                  <path
+                                    d="M3 8L6 11L11 3.5"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="opacity-0 group-has-checked:opacity-100"
+                                  />
+                                  <path
+                                    d="M3 7H11"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="opacity-0 group-has-indeterminate:opacity-100"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+                            <label
+                              htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                              className="min-w-0 flex-1 text-gray-500"
+                            >
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </DisclosurePanel>
+                  </Disclosure>
+                ))}
+
               </form>
             </DialogPanel>
           </div>
@@ -209,7 +253,7 @@ export default function FilterProduct() {
 
                 <MenuItems
                   transition
-                  className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white ring-1 shadow-2xl ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                  className="absolute right-0 z-[99] mt-2 w-40 origin-top-right rounded-md bg-white ring-1 shadow-2xl ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                 >
                   <div className="py-1">
                     {sortOptions.map((option) => (
@@ -250,9 +294,10 @@ export default function FilterProduct() {
             </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {/* Filters */}
-              <form className="hidden lg:block  sticky top-0 min-h-[100vh]">
-                {filters.map((section) => (
+              <div>
+               <div className="text-[1.6vw] font-semibold text-black/70 w-full flex justify-between items-center">Filters <FunnelIcon className="h-6 w-6 text-gray-700"/>  </div>
+               <form className="hidden lg:block  sticky top-0 min-h-[100vh]">
+               {filters.map((section) => (
                   <Disclosure key={section.id} as="div" className="border-b border-gray-200 py-6">
                     <h3 className="-my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
@@ -275,6 +320,64 @@ export default function FilterProduct() {
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   type="checkbox"
+                                  onChange={(e) => handleFilter(option.value, section.id)}
+                                  className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                />
+                                <svg
+                                  fill="none"
+                                  viewBox="0 0 14 14"
+                                  className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+                                >
+                                  <path
+                                    d="M3 8L6 11L11 3.5"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="opacity-0 group-has-checked:opacity-100"
+                                  />
+                                  <path
+                                    d="M3 7H11"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="opacity-0 group-has-indeterminate:opacity-100"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+                            <label htmlFor={`filter-${section.id}-${optionIdx}`} className="text-sm text-gray-600">
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </DisclosurePanel>
+                  </Disclosure>
+                ))}
+                {singleFilter.map((section) => (
+                  <Disclosure key={section.id} as="div" className="border-b border-gray-200 py-6">
+                    <h3 className="-my-3 flow-root">
+                      <DisclosureButton className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                        <span className="font-medium text-gray-900">{section.name}</span>
+                        <span className="ml-6 flex items-center">
+                          <PlusIcon aria-hidden="true" className="size-5 group-data-open:hidden" />
+                          <MinusIcon aria-hidden="true" className="size-5 group-not-data-open:hidden" />
+                        </span>
+                      </DisclosureButton>
+                    </h3>
+                    <DisclosurePanel className="pt-6">
+                      <div className="space-y-4">
+                        {section.options.map((option, optionIdx) => (
+                          <div key={option.value} className="flex gap-3">
+                            <div className="flex h-5 shrink-0 items-center">
+                              <div className="group grid size-4 grid-cols-1">
+                                <input
+                                  defaultValue={option.value}
+                                  defaultChecked={option.checked}
+                                  id={`filter-${section.id}-${optionIdx}`}
+                                  name={`${section.id}[]`}
+                                  type="checkbox"
+                                  onChange={(e) => handleFilterSingle(e, section.id)}
                                   className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                 />
                                 <svg
@@ -309,10 +412,12 @@ export default function FilterProduct() {
                   </Disclosure>
                 ))}
               </form>
+              </div>
+
 
               {/* Product grid */}
-              <div className="lg:col-span-3 overflow-y-auto h-[100vh]">
-                 <ProductCard/>
+              <div className="lg:col-span-3 overflow-y-auto h-[100vh] grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-3 xl:gap-x-8">
+                  {mens_kurta.map((item) =>  <ProductCard  product ={item} />  )  }
               </div>
             </div>
           </section>

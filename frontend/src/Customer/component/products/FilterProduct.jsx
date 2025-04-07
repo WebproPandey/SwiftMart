@@ -59,7 +59,7 @@ export default function FilterProduct() {
   
     navigate(`?${searchParams.toString()}`);
   };
-  
+
   const handleFilterSingle = (e, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
   
@@ -416,7 +416,7 @@ export default function FilterProduct() {
 
 
               {/* Product grid */}
-              <div className="lg:col-span-3 overflow-y-auto h-[100vh] grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-3 xl:gap-x-8">
+              <div className="lg:col-span-3 overflow-y-auto h-[150vh] grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-3 xl:gap-x-8">
                   {mens_kurta.map((item) =>  <ProductCard  product ={item} />  )  }
               </div>
             </div>

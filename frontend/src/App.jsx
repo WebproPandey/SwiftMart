@@ -3,6 +3,7 @@ import Navigation from './Customer/component/Navigation/Navigation'
 import HomePages from './Customer/pages/HomePage/HomePages'
 import Fotter from './Customer/Fotter/Fotter'
 import Products from './Customer/component/products/Products'
+import ProductDetails from './Customer/component/productDetails/ProductDetails'
 
 const App = () => {
   return (
@@ -10,7 +11,8 @@ const App = () => {
       <Navigation/>
       <div>
         {/* <HomePages/> */}
-        <Products/>
+        {/* <Products/> */}
+        <ProductDetails/>
       </div>
       <Fotter/>
       

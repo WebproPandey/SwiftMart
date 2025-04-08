@@ -4,10 +4,15 @@
 import { useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
+import RatingReview from './RatingReview'
+import UserReview from './UserReview'
+import { mens_kurta } from '../../../Data/mens_kurta'
+import Sectioncarosel from '../HomeSectionCarosel/Sectioncarosel'
+import HomeSectionCards from '../HomeSectionCard/HomeSectionCards'
 
 const product = {
   name: 'Basic Tee 6-Pack',
-  price: '$192',
+  price: '₹192',
   href: '#',
   breadcrumbs: [
     { id: 1, name: 'Men', href: '#' },
@@ -64,7 +69,7 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
 
   return (
-    <div className="bg-white w-full">
+    <div className="bg-white w-full min-h-[100vh] relative">
       <div className="pt-6  ]">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -96,7 +101,7 @@ export default function ProductDetails() {
         </nav>
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-10 px4  pt-10 w-full">
         {/* Image gallery */}
-        <div className="flex flex-col gap-3  items-center ">
+         <div className="flex flex-col gap-3  items-center ">
            <div className="overflow-hidden w-[30vw] h-[70vh] rounded-lg ">
             <img
               alt={product.images[0].alt}
@@ -141,18 +146,23 @@ export default function ProductDetails() {
             src={product.images[3].src}
             className="aspect-4/5 size-full object-cover sm:rounded-lg lg:aspect-auto"
           /> */}
-        </div>
+         </div>
 
-        {/* Product info */}
-        <div className="w-full pr-[4rem] ">
+         {/* Product info */}
+          <div className="w-full pr-[4rem] ">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
+            <p className="text-2xl  text-gray-400 capitalize">Casual Puff Sleeves Solid Women White Top</p>
            </div>
 
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0 ">
+            <div className='flex gap-2 mt-2'>
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
+            <p className="text-xl tracking-tight text-gray-900">{product.price}</p>
+            <p className="text-xl line-through tracking-tight text-gray-300">₹210</p>
+            <p className="text-xl tracking-tight text-green-600">5% off</p>
+            </div>
 
             {/* Reviews */}
             <div className="mt-6">
@@ -178,32 +188,7 @@ export default function ProductDetails() {
             </div>
 
             <form className="mt-10">
-              {/* Colors */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-900">Color</h3>
-
-                <fieldset aria-label="Choose a color" className="mt-4">
-                  <RadioGroup value={selectedColor} onChange={setSelectedColor} className="flex items-center gap-x-3">
-                    {product.colors.map((color) => (
-                      <Radio
-                        key={color.name}
-                        value={color}
-                        aria-label={color.name}
-                        className={classNames(
-                          color.selectedClass,
-                          'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-hidden data-checked:ring-2 data-focus:data-checked:ring-3 data-focus:data-checked:ring-offset-1',
-                        )}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={classNames(color.class, 'size-8 rounded-full border border-black/10')}
-                        />
-                      </Radio>
-                    ))}
-                  </RadioGroup>
-                </fieldset>
-              </div>
-
+            
               {/* Sizes */}
               <div className="mt-10 w-[50%]">
                 <div className="flex items-center justify-between">
@@ -262,7 +247,7 @@ export default function ProductDetails() {
                 type="submit"
                 className="mt-5 w-[20%] flex  items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
               >
-                Add to bag
+                Add to Cart
               </button>
             </form>
           </div>
@@ -299,8 +284,29 @@ export default function ProductDetails() {
               </div>
             </div>
           </div>
-        </div>
+          </div>
         </section>   
+        {/* rating and reviews */}
+        <section className="px-[4rem] mb-8">
+            <h1 className='text-2xl font-semibold'>Recent Review & Rating</h1>
+            <div className='w-full grid grid-cols-2 gap-4'>
+                <div>
+                 <h1 className="text-lg font-semibold">User Reviews</h1>
+                  <UserReview/>
+                </div>
+                <RatingReview/>
+            </div>
+        </section>
+
+        {/* similer product */}
+
+        <section className='SimilarProduct px-[4rem]  py-[2rem] sticky top-0 h-[100vh] overflow-y-auto overflow-hidden'>
+            <h1 className='text-2xl font-semibold my-[2rem]'>Similare Product</h1>
+            <div className=' grid grid-cols-4 gap-y-3 gap-2 ' >
+              {mens_kurta.map((item) => <HomeSectionCards product={item} /> )}
+            </div>
+
+        </section>
 
       </div>
     </div>

@@ -25,3 +25,10 @@
 .Navigationdialog{
     z-index: 99999 !important;
 }
+
+.userReview::-webkit-scrollbar,
+.SimilarProduct::-webkit-scrollbar,
+.CartItems::-webkit-scrollbar,
+.right_orderdata::-webkit-scrollbar {
+    display: none;
+}

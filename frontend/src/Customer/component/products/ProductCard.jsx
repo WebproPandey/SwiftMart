@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 const products = [
     {
       id: 1,
@@ -75,8 +77,10 @@ const products = [
   ]
   
 export default function ProductCard({product}) {
+  const navigate =  useNavigate()
   return (
             <div
+              onClick={() =>navigate(`/product/${5}`)}
               key={product.id}
               className="group relative bg-gray-800 flex justify-center items-end lg:aspect-auto  h-[60vh] hover:shadow-lg transition duration-300 ease-in-out overflow-hidden rounded-md"
             >
@@ -112,6 +116,8 @@ export default function ProductCard({product}) {
 
               {/* Add a subtle scale effect on hover */}
               <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></div>
+          
             </div>
   );
+
 }

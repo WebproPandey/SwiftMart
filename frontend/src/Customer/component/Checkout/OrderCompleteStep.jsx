@@ -5,7 +5,7 @@ const OrderCompleteStep = ({ productData }) => {
   const navigate = useNavigate();
 
   const handleOrderTracking = () => {
-    navigate("/order", { state: { productData } });
+    navigate("/account/order", { state: { productData } });
   };
   console.log(productData);
   

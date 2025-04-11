@@ -1,6 +1,5 @@
-'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -14,140 +13,172 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+} from "@headlessui/react";
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { Link, useNavigate } from "react-router";
 
 const navigation = {
   categories: [
     {
-      id: 'women',
-      name: 'Women',
+      id: "women",
+      name: "Women",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+          name: "New Arrivals",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg",
+          imageAlt:
+            "Models sitting back to back, wearing Basic Tee in black and bone.",
         },
         {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+          name: "Basic Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg",
+          imageAlt:
+            "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
         },
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: "clothing",
+          name: "Clothing",
           items: [
-            { name: 'Tops', id:"top", href: `{women/clothing/top}` },
-            { name: 'Dresses',id:"women_dress",href: '#' },
-            { name: 'Pants', id:"women_jeans" ,href: '#' },
-            { name: 'Denim',  href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: "Tops", id: "top", href: `{women/clothing/top}` },
+            { name: "Dresses", id: "women_dress", href: "#" },
+            { name: "Pants", id: "women_jeans", href: "#" },
+            { name: "Denim", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "accessories",
+          name: "Accessories",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "brands",
+          name: "Brands",
           items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Significant Other", href: "#" },
           ],
         },
       ],
     },
     {
-      id: 'men',
-      name: 'Men',
+      id: "men",
+      name: "Men",
       featured: [
         {
-          name: 'New Arrivals',
-          href: '#',
+          name: "New Arrivals",
+          href: "#",
           imageSrc:
-            'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+          imageAlt:
+            "Drawstring top with elastic loop closure and textured interior padding.",
         },
         {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg',
+          name: "Artwork Tees",
+          href: "#",
+          imageSrc:
+            "https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg",
           imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
+            "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.",
         },
       ],
       sections: [
         {
-          id: 'clothing',
-          name: 'Clothing',
+          id: "clothing",
+          name: "Clothing",
           items: [
-            { name: 'Tops', href: `{men/clothing/top}` },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
+            { name: "Tops", href: `{men/clothing/top}` },
+            { name: "Pants", href: "#" },
+            { name: "Sweaters", href: "#" },
+            { name: "T-Shirts", href: "#" },
+            { name: "Jackets", href: "#" },
+            { name: "Activewear", href: "#" },
+            { name: "Browse All", href: "#" },
           ],
         },
         {
-          id: 'accessories',
-          name: 'Accessories',
+          id: "accessories",
+          name: "Accessories",
           items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
+            { name: "Watches", href: "#" },
+            { name: "Wallets", href: "#" },
+            { name: "Bags", href: "#" },
+            { name: "Sunglasses", href: "#" },
+            { name: "Hats", href: "#" },
+            { name: "Belts", href: "#" },
           ],
         },
         {
-          id: 'brands',
-          name: 'Brands',
+          id: "brands",
+          name: "Brands",
           items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
+            { name: "Re-Arranged", href: "#" },
+            { name: "Counterfeit", href: "#" },
+            { name: "Full Nelson", href: "#" },
+            { name: "My Way", href: "#" },
           ],
         },
       ],
     },
   ],
   pages: [
-    { name: 'Company', href: '/' },
-    { name: 'Stores', href: '/' },
+    { name: "Company", href: "/" },
+    { name: "Stores", href: "/" },
   ],
-}
+};
 
 export default function Navigation() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false); // State to control Navpanel visibility
+  const navigate = useNavigate();
+  const [openCategory, setOpenCategory] = useState(null);
+  const [openprofile, setOpenProfile] = useState(false);
 
+  const toggleCategory = (categoryId) => {
+    setOpenCategory((prev) => (prev === categoryId ? null : categoryId));
+  };
+  
+  const handleCategoryClick = (category, section, item) => {
+    navigate(`/${category.id}/${section.id}/${item.id}`);
+    setOpenCategory(null); 
+  };
+
+  const hadlerProfilemenu =  () =>{
+    setOpenProfile(!openprofile)
+  }
+  
   return (
     <div className="Navigation bg-white z-[1000]">
       {/* Mobile menu */}
-      <Dialog open={open} onClose={setOpen} className="Navigationdialog relative z-[1001] lg:hidden">
+      <Dialog
+        open={open}
+        onClose={setOpen}
+        className="Navigationdialog relative z-[1001] lg:hidden"
+      >
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
@@ -186,7 +217,10 @@ export default function Navigation() {
               </div>
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category) => (
-                  <TabPanel key={category.name} className="space-y-10 px-4 pb-8 pt-10">
+                  <TabPanel
+                    key={category.name}
+                    className="space-y-10 px-4 pb-8 pt-10"
+                  >
                     <div className="grid grid-cols-2 gap-x-4">
                       {category.featured.map((item) => (
                         <div key={item.name} className="group relative text-sm">
@@ -195,8 +229,14 @@ export default function Navigation() {
                             src={item.imageSrc}
                             className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                           />
-                          <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                            <span aria-hidden="true" className="absolute inset-0 z-10" />
+                          <a
+                            href={item.href}
+                            className="mt-6 block font-medium text-gray-900"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="absolute inset-0 z-10"
+                            />
                             {item.name}
                           </a>
                           <p aria-hidden="true" className="mt-1">
@@ -207,7 +247,10 @@ export default function Navigation() {
                     </div>
                     {category.sections.map((section) => (
                       <div key={section.name}>
-                        <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
+                        <p
+                          id={`${category.id}-${section.id}-heading-mobile`}
+                          className="font-medium text-gray-900"
+                        >
                           {section.name}
                         </p>
                         <ul
@@ -217,7 +260,10 @@ export default function Navigation() {
                         >
                           {section.items.map((item) => (
                             <li key={item.name} className="flow-root">
-                              <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                              <a
+                                href={item.href}
+                                className="-m-2 block p-2 text-gray-500"
+                              >
                                 {item.name}
                               </a>
                             </li>
@@ -233,7 +279,10 @@ export default function Navigation() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               {navigation.pages.map((page) => (
                 <div key={page.name} className="flow-root">
-                  <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  <a
+                    href={page.href}
+                    className="-m-2 block p-2 font-medium text-gray-900"
+                  >
                     {page.name}
                   </a>
                 </div>
@@ -242,12 +291,18 @@ export default function Navigation() {
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Sign in
                 </a>
               </div>
               <div className="flow-root">
-                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                <a
+                  href="#"
+                  className="-m-2 block p-2 font-medium text-gray-900"
+                >
                   Create account
                 </a>
               </div>
@@ -260,7 +315,9 @@ export default function Navigation() {
                   src="https://tailwindcss.com/plus-assets/img/flags/flag-canada.svg"
                   className="block h-auto w-5 shrink-0"
                 />
-                <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
+                <span className="ml-3 block text-base font-medium text-gray-900">
+                  CAD
+                </span>
                 <span className="sr-only">, change currency</span>
               </a>
             </div>
@@ -273,7 +330,10 @@ export default function Navigation() {
           Get free delivery on orders over $100
         </p>
 
-        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Top"
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center">
               <button
@@ -288,49 +348,69 @@ export default function Navigation() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
+                <Link to="/">
                   <span className="sr-only">Your Company</span>
                   <img
                     alt=""
                     src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                     className="h-8 w-auto"
                   />
-                </a>
+                </Link>
               </div>
 
               {/* Flyout menus */}
-              <PopoverGroup className="hidden lg:ml-8 lg:block lg:self-stretch">
+              <div className="hidden lg:ml-8 lg:block lg:self-stretch  ">
                 <div className="flex h-full space-x-8">
                   {navigation.categories.map((category) => (
-                    <Popover key={category.name} className="flex">
+                    <div key={category.name} className="flex">
                       <div className="relative flex">
-                        <PopoverButton className="relative outline-none z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-indigo-600 data-[open]:text-indigo-600">
+                        <div
+                          onClick={() => toggleCategory(category.id)}
+                          className="relative cursor-pointer  outline-none z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-indigo-600 data-[open]:text-indigo-600"
+                        >
                           {category.name}
-                        </PopoverButton>
+                        </div>
                       </div>
 
-                      <PopoverPanel
-                        transition
-                        className="absolute inset-x-0 top-full text-sm text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                      <div
+                        className={`Navpanel ${openCategory === category.id ? "block" : "hidden"} absolute  inset-x-0 top-full text-sm text-gray-500 transition-opacity duration-200 ease-in-out`}
                       >
-                        {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                        <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow" />
+                       
+                        <div
+                          aria-hidden="true"
+                          className={`Navpanel   absolute inset-0 top-1/2  shadow`}
+                        />
 
-                        <div className="relative bg-white">
+                        <div className="relative  bg-white ">
                           <div className="mx-auto max-w-7xl px-8">
                             <div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
                               <div className="col-start-2 grid grid-cols-2 gap-x-8">
                                 {category.featured.map((item) => (
-                                  <div key={item.name} className="group relative text-base sm:text-sm">
+                                  <div
+                                    key={item.name}
+                                    className="group relative text-base sm:text-sm"
+                                  >
                                     <img
                                       alt={item.imageAlt}
                                       src={item.imageSrc}
                                       className="aspect-square w-full rounded-lg bg-gray-100 object-cover group-hover:opacity-75"
                                     />
-                                    <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                      <span aria-hidden="true" className="absolute inset-0 z-10" />
+                                    <p
+                                      onClick={() =>
+                                        handleCategoryClick (
+                                          category,
+                                          section,
+                                          item
+                                        )
+                                      }
+                                      className="mt-6 block font-medium text-red-900"
+                                    >
+                                      <span
+                                        aria-hidden="true"
+                                        className="absolute inset-0 z-10"
+                                      />
                                       {item.name}
-                                    </a>
+                                    </p>
                                     <p aria-hidden="true" className="mt-1">
                                       Shop now
                                     </p>
@@ -340,7 +420,10 @@ export default function Navigation() {
                               <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
                                 {category.sections.map((section) => (
                                   <div key={section.name}>
-                                    <p id={`${section.name}-heading`} className="font-medium text-gray-900">
+                                    <p
+                                      id={`${section.name}-heading`}
+                                      className="font-medium text-gray-900"
+                                    >
                                       {section.name}
                                     </p>
                                     <ul
@@ -350,9 +433,18 @@ export default function Navigation() {
                                     >
                                       {section.items.map((item) => (
                                         <li key={item.name} className="flex">
-                                          <a href={item.href} className="hover:text-gray-800">
+                                          <p
+                                            onClick={() =>
+                                              handleCategoryClick (
+                                                category,
+                                                section,
+                                                item
+                                              )
+                                            }
+                                            className="hover:text-gray-800 cursor-pointer text-red-900"
+                                          >
                                             {item.name}
-                                          </a>
+                                          </p>
                                         </li>
                                       ))}
                                     </ul>
@@ -362,8 +454,8 @@ export default function Navigation() {
                             </div>
                           </div>
                         </div>
-                      </PopoverPanel>
-                    </Popover>
+                      </div>
+                    </div>
                   ))}
 
                   {navigation.pages.map((page) => (
@@ -376,34 +468,42 @@ export default function Navigation() {
                     </a>
                   ))}
                 </div>
-              </PopoverGroup>
+              </div>
 
               <div className="ml-auto flex items-center">
-                  <div className=" h-[8vh] w-[8vh] rounded-full  bg-red-200">
-                  
-                  </div>
-                
 
-               
+                <div onClick={hadlerProfilemenu}  className=" h-[7vh] w-[7vh] rounded-full  bg-red-200 cursor-pointer relative">
+                  <img src="" alt="" />
+                  <div className={`h-fit w-[10vw] ${openprofile ? "block" : " hidden"}  absolute flex overflow-hidden flex-col top-[100%] left-0 shadow-lg rounded-md bg-gray-200`}>
+                    <Link className="hover:bg-slate-300 w-full text-center py-2 mx-auto">Profile</Link>
+                    <Link to="/account/order" className="hover:bg-slate-300 w-full text-center py-2 mx-auto">My Order</Link>
+                    <Link className="hover:bg-slate-300 w-full text-center py-2 mx-auto">Logout</Link>
+                  </div>
+                </div>
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
                   <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
-                    <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                    <MagnifyingGlassIcon
+                      aria-hidden="true"
+                      className="size-6"
+                    />
                   </a>
                 </div>
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <a href="#" className="group -m-2 flex items-center p-2">
+                  <Link to="/cart" className="group -m-2 flex items-center p-2">
                     <ShoppingBagIcon
                       aria-hidden="true"
                       className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                      0
+                    </span>
                     <span className="sr-only">items in cart, view bag</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -411,5 +511,5 @@ export default function Navigation() {
         </nav>
       </header>
     </div>
-  )
+  );
 }

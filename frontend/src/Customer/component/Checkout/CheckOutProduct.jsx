@@ -5,6 +5,7 @@ import DeliveryStep from "./DeliveryStep";
 import OrderSummaryStep from "./OrderSummaryStep";
 import PaymentStep from "./PaymentStep";
 import OrderCompleteStep from "./OrderCompleteStep";
+import { useNavigate } from "react-router";
 
 const steps = ["Login", "Delivery", "Order Summary", "Payment", "Done"];
 
@@ -109,7 +110,8 @@ const CheckOutProduct = () => {
         return null;
     }
   };
-
+  const navigate  = useNavigate()
+ 
   return (
     <div className="p-4 sm:p-6 lg:p-8 h-screen flex flex-col justify-between">
       {/* Stepper */}

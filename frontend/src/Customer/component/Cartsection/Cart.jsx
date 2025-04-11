@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router'
+
 
 const Cart = () => {
   const cartItems = [
@@ -40,6 +42,12 @@ const Cart = () => {
   const shippingCharge = 10;
   const tax = (subtotal * 0.1).toFixed(2); // 10% tax
   const total = (subtotal + shippingCharge + parseFloat(tax)).toFixed(2);
+  const navigate =  useNavigate()
+
+  const handleCheckOut = () => {
+    navigate("/checkout?step=2")
+  }
+
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 p-8 h-[80vh]  sticky  top-0 px-[4rem] ">
@@ -103,7 +111,7 @@ const Cart = () => {
             <span className="text-lg font-semibold">${total}</span>
           </div>
         </div>
-        <button className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">
+        <button onClick={handleCheckOut} className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">
           Checkout
         </button>
       </div>

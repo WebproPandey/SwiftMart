@@ -9,6 +9,7 @@ import UserReview from './UserReview'
 import { mens_kurta } from '../../../Data/mens_kurta'
 import Sectioncarosel from '../HomeSectionCarosel/Sectioncarosel'
 import HomeSectionCards from '../HomeSectionCard/HomeSectionCards'
+import { useNavigate } from 'react-router'
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -67,6 +68,12 @@ function classNames(...classes) {
 export default function ProductDetails() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+   const  navigate = useNavigate()
+
+  const handelAddtoCart  =  () =>{
+    navigate("/cart")
+
+  }
 
   return (
     <div className="bg-white w-full min-h-[100vh] relative">
@@ -245,7 +252,8 @@ export default function ProductDetails() {
 
               <button
                 type="submit"
-                className="mt-5 w-[20%] flex  items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
+                onClick={handelAddtoCart}
+                className="mt-5 w-[30%] flex  items-center justify-center rounded-md border border-transparent bg-indigo-600 px-2 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
               >
                 Add to Cart
               </button>

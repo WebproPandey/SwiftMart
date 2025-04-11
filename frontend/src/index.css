@@ -29,6 +29,8 @@
 .userReview::-webkit-scrollbar,
 .SimilarProduct::-webkit-scrollbar,
 .CartItems::-webkit-scrollbar,
-.right_orderdata::-webkit-scrollbar {
+.right_orderdata::-webkit-scrollbar,
+.PendingOrders::-webkit-scrollbar
+{
     display: none;
 }

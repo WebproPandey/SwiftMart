@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken")
+const dotenv = require('dotenv')
+dotenv.config()
 
 const generateToken  = (userId) =>{
-    const token = jwt.sign({userId},SECRET_KEY,{expiresIn:"48h"})
+    const token = jwt.sign({userId}, process.env.SECRET_KEY,{expiresIn:"48h"})
     return token ;
 }
 
 const getUserIdFromToken = (token) =>{
-    const decodedToken =  jwt.verify(token ,SECRET_KEY )
+    const decodedToken =  jwt.verify(token , process.env.SECRET_KEY )
     return  decodedToken.userId
 
 }

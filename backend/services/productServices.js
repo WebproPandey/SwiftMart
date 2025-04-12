@@ -41,7 +41,7 @@ async  function createProduct(reqData){
     }
 
     const product = new Product ({
-        titleL:reqData.color,
+        title:reqData.color,
         color:reqData.color,
         description:reqData.description,
         discountedPrice:reqData.discountedPrice,
@@ -50,7 +50,7 @@ async  function createProduct(reqData){
         brand:reqData.brand,
         price:reqData.price,
         sizes:reqData.size,
-        qunatity:reqData.qunatity,
+        quantity:reqData.quantity,
         category:thirdLevel._id
     })
 

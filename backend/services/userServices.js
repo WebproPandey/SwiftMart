@@ -30,9 +30,9 @@ const findUserById = async (userId) =>{
     const user  = await User.findById(userId)
    //  .populate("address");
     if(!user){
-        throw new Error("user not Found with id :" , userId)
-    }
-
+      throw new Error(`User not found with id: ${userId}`);
+   }
+   // console.log(user)
     return user
  } catch (error) {
     throw new Error(error.message)

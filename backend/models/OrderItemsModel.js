@@ -4,7 +4,7 @@ const OrderItemsSchema = new mongoose.Schema({
     product:{
         type:mongoose.Schema.ObjectId,
         ref:"products",
-        required:true,
+        // required:true,
 
     },
     size:{
@@ -16,11 +16,11 @@ const OrderItemsSchema = new mongoose.Schema({
     },
     price:{
         type:Number,
-        required:true
+        // required:true
     },
     discountePrice:{
         type:Number,
-        required:true
+        // required:true
     },
     userId:{
         type:mongoose.Schema.ObjectId,

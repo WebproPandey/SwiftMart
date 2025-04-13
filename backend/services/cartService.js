@@ -51,13 +51,13 @@ async function findUserCart (userId){
 
 async function addCartItem  (userId , req){
   try {
-    const cart =  await cart.findOne({user:user._id});
+    const cart =  await Cart.findOne({user:userId});
     const product = await Product.findById(req.productId);
 
     const isPresent =  await CartItems.findOne({cart:cart._id , product:product._id, userId})
 
     if(!isPresent) {
-      const cartItem =  new CartItems({
+      const newcartItem =  new CartItems({
         product:product._id,
         cart:cart._id,
         quantity:1,
@@ -68,10 +68,13 @@ async function addCartItem  (userId , req){
         
       })
 
-      const createdCartItem = await cartItem.sace();
-      cart.cartItem.push(createdCartItem)
+      const createdCartItem = await newcartItem.save();
+      cart.cartItems.push(createdCartItem._id)
       await cart.save()
       return "Item added  to cart"
+    }
+    else {
+      return "Item already exists in cart";
     }
 
 

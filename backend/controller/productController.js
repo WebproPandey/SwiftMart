@@ -22,7 +22,7 @@ const deleteProduct = async (req,res) =>{
 const  updateProduct = async (req,res) =>{
     const productId =  req.params.id
     try {
-        const product  =  await productServices.updateProduct(productId , req,body)
+        const product  =  await productServices.updateProduct(productId , req.body)
         return res.status(201).send(product);
     } catch (error) {
         return res.status(500).send({error:error.message})

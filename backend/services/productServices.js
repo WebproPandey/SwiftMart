@@ -12,6 +12,8 @@ async  function createProduct(reqData){
             name:reqData.topLevelCategory,
             level:1
          })
+
+         await topLevel.save()
     }
 
     let secondLevel = await Category.findOne({
@@ -26,6 +28,8 @@ async  function createProduct(reqData){
             parentCategory:topLevel._id,
             level:2,
         })
+        await secondLevel.save()
+
     }
     let thirdLevel = await Category.findOne({
         name:reqData.thirdLevelCategory,
@@ -38,6 +42,7 @@ async  function createProduct(reqData){
             parentCategory:secondLevel._id,
             level:3
         })
+        await thirdLevel.save()
     }
 
     const product = new Product ({
@@ -58,7 +63,7 @@ async  function createProduct(reqData){
     
 }
 
-async function deletedProduct(productId) {
+async function deleteProduct(productId) {
     const product = await findProductById(productId)
     await Product.findByIdAndDelete(productId)
     return "Product deleted Successfully"
@@ -70,6 +75,7 @@ async function updateProduct(productId, reqData){
 
 
 async function  findProductById (id){
+    
    const product =  await Product.findById(id).populate("category").exec()
    if(!product){
     throw new Error("Product not Found with Id" + id);
@@ -78,7 +84,7 @@ async function  findProductById (id){
    return product;
 }
 
-async function gatAllProducts(reqQuery){
+async function getAllProducts(reqQuery){
     let {category, color, sizes,minPrice,maxPrice,miniDiscount,sort,stock,pageNumber,pageSize} =  reqQuery
     pageSize= pageSize || 10;
     let query = Product.find().populate("category");
@@ -141,4 +147,4 @@ async function createMultipleProduct(products){
     }
 }
 
-module.exports ={createProduct , deletedProduct,updateProduct,findProductById,gatAllProducts,createMultipleProduct}
+module.exports ={createProduct , deleteProduct ,updateProduct,findProductById,getAllProducts,createMultipleProduct}

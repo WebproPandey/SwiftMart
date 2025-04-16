@@ -1,5 +1,7 @@
 import {FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS } from "./ActionType"
 
+
+
 export  const findProducts =  (reqData) =>  async (dispatch) =>{
 const  {colors, sizes,minPrice,maxPrice,minDiscount,category,stock,sort,pageNumber,pageSize} =   reqData
 dispatch({type:FIND_PRODUCT_REQUEST})

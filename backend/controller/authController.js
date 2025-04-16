@@ -6,12 +6,14 @@ const bcrypt =  require("bcrypt")
 
 const register =  async(req, res) => {
    try {
+      console.log("User Data:", req.body);
      const user  = await userService.createUser(req.body);
      const jwt  = jwtProvider.generateToken(user._id)
      await cartService.createCart(user)
      return  res.status(200).send({jwt,message:"register success"})
 
    } catch (error) {
+      console.error("Register Error:", error); 
      return res.status(500).send({error:error.message})
     
    }

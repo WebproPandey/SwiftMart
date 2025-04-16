@@ -1,5 +1,4 @@
-
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogBackdrop,
@@ -21,6 +20,9 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router";
+import Login from "../authpage/Login";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, logout } from "../../../State/Auth/Action";
 
 const navigation = {
   categories: [
@@ -153,26 +155,86 @@ const navigation = {
 };
 
 export default function Navigation() {
-  const [open, setOpen] = useState(false); // State to control Navpanel visibility
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [openCategory, setOpenCategory] = useState(null);
+  const menuRef = useRef();
   const [openprofile, setOpenProfile] = useState(false);
+  const dispatch = useDispatch();
+
+  const auth = useSelector((store) => store.auth);
+  // console.log(auth.user);
+
+  const getRandomColor = () => {
+    const bgColors = [
+      "#FFD700",
+      "#FF6347",
+      "#32CD32",
+      "#1E90FF",
+      "#FF69B4",
+      "#9370DB",
+    ];
+    const textColors = ["#000", "#fff"];
+    const bgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+    const textColor = textColors[Math.floor(Math.random() * textColors.length)];
+    return { bgColor, textColor };
+  };
+
+  const colors = getRandomColor();
+
+  useEffect(() => {
+    if (auth.jwt) {
+      dispatch(getUser({...colors }));
+    }
+  }, [auth.jwt]);
+
+  useEffect(() => {
+    if (auth.user) {
+    setOpenAuth(false);
+    navigate("/")
+    }
+  }, [auth.user]);
 
   const toggleCategory = (categoryId) => {
     setOpenCategory((prev) => (prev === categoryId ? null : categoryId));
   };
-  
+
   const handleCategoryClick = (category, section, item) => {
     navigate(`/${category.id}/${section.id}/${item.id}`);
-    setOpenCategory(null); 
+    setOpenCategory(null);
   };
 
-  const hadlerProfilemenu =  () =>{
-    setOpenProfile(!openprofile)
-  }
+  const hadlerProfilemenu = () => {
+    setOpenProfile((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenProfile(false);
+      }
+    };
   
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  
+
+  const [openAuth, setOpenAuth] = useState(false);
+
+  const authHandler = () => {
+    setOpenAuth(true);
+  };
+
+  const closeAuth = () => {
+    setOpenAuth(false);
+
+  };
+
   return (
-    <div className="Navigation bg-white z-[1000]">
+    <div ref={menuRef} className="Navigation bg-white z-[1000]">
       {/* Mobile menu */}
       <Dialog
         open={open}
@@ -373,9 +435,10 @@ export default function Navigation() {
                       </div>
 
                       <div
-                        className={`Navpanel ${openCategory === category.id ? "block" : "hidden"} absolute  inset-x-0 top-full text-sm text-gray-500 transition-opacity duration-200 ease-in-out`}
+                        className={`Navpanel ${
+                          openCategory === category.id ? "block" : "hidden"
+                        } absolute  inset-x-0 top-full text-sm text-gray-500 transition-opacity duration-200 ease-in-out`}
                       >
-                       
                         <div
                           aria-hidden="true"
                           className={`Navpanel   absolute inset-0 top-1/2  shadow`}
@@ -397,7 +460,7 @@ export default function Navigation() {
                                     />
                                     <p
                                       onClick={() =>
-                                        handleCategoryClick (
+                                        handleCategoryClick(
                                           category,
                                           section,
                                           item
@@ -435,7 +498,7 @@ export default function Navigation() {
                                         <li key={item.name} className="flex">
                                           <p
                                             onClick={() =>
-                                              handleCategoryClick (
+                                              handleCategoryClick(
                                                 category,
                                                 section,
                                                 item
@@ -470,16 +533,45 @@ export default function Navigation() {
                 </div>
               </div>
 
-              <div className="ml-auto flex items-center">
-
-                <div onClick={hadlerProfilemenu}  className=" h-[7vh] w-[7vh] rounded-full  bg-red-200 cursor-pointer relative">
-                  <img src="" alt="" />
-                  <div className={`h-fit w-[10vw] ${openprofile ? "block" : " hidden"}  absolute flex overflow-hidden flex-col top-[100%] left-0 shadow-lg rounded-md bg-gray-200`}>
-                    <Link className="hover:bg-slate-300 w-full text-center py-2 mx-auto">Profile</Link>
-                    <Link to="/account/order" className="hover:bg-slate-300 w-full text-center py-2 mx-auto">My Order</Link>
-                    <Link className="hover:bg-slate-300 w-full text-center py-2 mx-auto">Logout</Link>
+              <div ref={menuRef} className="ml-auto flex items-center">
+                {auth.user ? (
+                  <div
+                    onClick={hadlerProfilemenu}
+                    className="h-[7vh] w-[7vh] rounded-full cursor-pointer relative"
+                    style={{
+                      backgroundColor: auth.user.bgColor || "gray",
+                      color: auth.user.textColor || "black",
+                    }}
+                  >
+                    <div className="uppercase flex items-center justify-center text-[2.5vw] text-center">
+                      {auth?.user?.firstName?.[0]}
+                    </div>
+                    <div
+                      className={`h-fit w-[10vw] ${
+                        openprofile ? "block" : "hidden"
+                      } absolute flex overflow-hidden flex-col top-[100%] left-0 shadow-lg rounded-md bg-gray-200`}
+                    >
+                      <Link className="hover:bg-slate-300 w-full text-center py-2 mx-auto">
+                        Profile
+                      </Link>
+                      <Link
+                        to="/account/order"
+                        className="hover:bg-slate-300 w-full text-center py-2 mx-auto"
+                      >
+                        My Order
+                      </Link>
+                      <Link 
+                       onClick={() => dispatch(logout())}
+                      className="hover:bg-slate-300 w-full text-center py-2 mx-auto">
+                        Logout
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div onClick={authHandler} className="">
+                    <Link to="/signin">Login</Link>
+                  </div>
+                )}
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
@@ -510,6 +602,7 @@ export default function Navigation() {
           </div>
         </nav>
       </header>
+      {openAuth && <Login closeAuth={closeAuth} />}
     </div>
   );
 }

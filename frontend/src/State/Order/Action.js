@@ -1,6 +1,7 @@
 import { CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, GET_ORDER_BY_ID_FAILURE, GET_ORDER_BY_ID_REQUEST, GET_ORDER_BY_ID_SUCCESS } from "./ActionType";
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+import { api } from  "../../config/apiConfig"
 
 
 export const createOrder =  (reqData) => async (dispatch) =>{

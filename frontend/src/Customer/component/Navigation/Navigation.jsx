@@ -114,13 +114,13 @@ const navigation = {
           id: "clothing",
           name: "Clothing",
           items: [
-            { name: "Tops", href: `{men/clothing/top}` },
-            { name: "Pants", href: "#" },
-            { name: "Sweaters", href: "#" },
-            { name: "T-Shirts", href: "#" },
-            { name: "Jackets", href: "#" },
-            { name: "Activewear", href: "#" },
-            { name: "Browse All", href: "#" },
+            { name: "Mens Kurtas",id:"mens_kurtas", href:`{men/clothing/mens_kurtas}` },
+            { name: "Shirt", id:"shirt",href: `{men/clothing/shirt}` },
+            { name: "Men Jeans",id:"men_jeans",href:`{men/clothing/men_jeans}` },
+            { name: "Sweaters", id:"sweaters", href:`{men/clothing/sweaters}` },
+            { name: "T-shirt", id:"t-shirt",href:`{men/clothing/t-shirt}` },
+            { name: "Jackets", id:"jackets" ,href:`{men/clothing/jackets}` },
+            { name: "Activewear",id:"activwear" ,href:`{men/clothing/activwear}` },
           ],
         },
         {
@@ -161,7 +161,7 @@ export default function Navigation() {
   const menuRef = useRef();
   const [openprofile, setOpenProfile] = useState(false);
   const dispatch = useDispatch();
-
+  const [openAuth, setOpenAuth] = useState(false);
   const auth = useSelector((store) => store.auth);
   // console.log(auth.user);
 
@@ -222,7 +222,6 @@ export default function Navigation() {
   }, []);
   
 
-  const [openAuth, setOpenAuth] = useState(false);
 
   const authHandler = () => {
     setOpenAuth(true);

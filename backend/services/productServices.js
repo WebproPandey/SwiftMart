@@ -83,64 +83,85 @@ async function  findProductById (id){
 
    return product;
 }
-
-async function getAllProducts(reqQuery){
-    let {category, color, sizes,minPrice,maxPrice,miniDiscount,sort,stock,pageNumber,pageSize} =  reqQuery
-    pageSize= pageSize || 10;
+async function getAllProducts(reqQuery = {}) {
+    let {
+      category,
+      color,
+      sizes,
+      minPrice,
+      maxPrice,
+      minDiscount,
+      sort,
+      stock,
+      pageNumber = 0,
+      pageSize = 10,
+    } = reqQuery;
+  
     let query = Product.find().populate("category");
-
-    if(category){
-        const existCategory =  await Category.findOne({name:category})
-        if(existCategory){
-            query= query.where("category").equals(existCategory._id);
-        }
-
-        else{
-            return {content:[],currentPage:1,totalPage:0}
-        }
+  
+    // Category Filter
+    if (category) {
+      const existCategory = await Category.findOne({ name: category });
+      if (existCategory) {
+        query = query.where("category").equals(existCategory._id);
+      } else {
+        return { content: [], currentPage: 1, totalPages: 0 };
+      }
     }
-
-    if(color){
-        const colorSet =  new Set(color.split(",").map(color => color.trim().toLowerCase()))
-
-        const colorRegex =  colorSet.size > 0?  new RegExp([...colorSet].join("|"),"i") :null;
-        query =  query.where("color").regex(colorRegex);
-
+  
+    // Color Filter
+    if (color) {
+      const colorSet = new Set(color.split(",").map((c) => c.trim().toLowerCase()));
+      if (colorSet.size > 0) {
+        const colorRegex = new RegExp([...colorSet].join("|"), "i");
+        query = query.where("color").regex(colorRegex);
+      }
     }
-
-    if(sizes){
-        const sizesSet =  new (sizes);
-        query.query.where("sizes.name").in([...sizesSet])
+  
+    // Sizes Filter (IMPORTANT FIX)
+    if (sizes) {
+      const sizeArray = sizes.split(",").map((s) => s.trim());
+      query = query.where("sizes.name").in(sizeArray);
     }
-
-    if(minPrice && maxPrice){
-        query = (await query.where('discountedPrice').gte(minPrice)).filter(maxPrice);
+  
+    // Price Range Filter
+    if (minPrice && maxPrice) {
+      query = query.where("discountedPrice").gte(minPrice).lte(maxPrice);
     }
-    if(miniDiscount){
-        query=  await query.where("discountPersent").gt(miniDiscount);
+  
+    // Minimum Discount
+    if (minDiscount) {
+      query = query.where("discountPresent").gte(minDiscount);
     }
-
-    if(stock){
-        if(stock ==  "in_stock"){
-            query = query.where("quantity").gt(0)
-        }
-        else if(stock ==  "Out_of_stock"){
-            query = query.where("quantity").gt(1)
-        }
+  
+    // Stock Filter
+    if (stock) {
+      if (stock === "in_stock") {
+        query = query.where("quantity").gt(0);
+      } else if (stock === "out_of_stock") {
+        query = query.where("quantity").lte(0);
+      }
     }
-    if(sort){
-         const sortDirection =  sort === "price_hight"?-1:1;
-         query =  query.sort({discountedPrice:sortDirection})
+  
+    // Sort Logic
+    if (sort) {
+      const sortDirection = sort === "price_high" ? -1 : 1;
+      query = query.sort({ discountedPrice: sortDirection });
     }
-    const totalProduct = await Product.countDocuments(query)
-    const skip = (pageNumber-1)*pageSize;
-    query = query.skip(skip).limit(pageSize)
-    const products = await query.exec()
-    const totalPages= Math.ceil(totalProduct/pageSize)
-
-    return {content:products, currentPage:pageNumber,totalPages}
-}
-
+  
+    const totalProduct = await query.clone().countDocuments(); 
+    const skip = pageNumber * pageSize;
+    query = query.skip(skip).limit(pageSize);
+  
+    const products = await query.exec();
+    const totalPages = Math.ceil(totalProduct / pageSize);
+    return {
+      content: products,
+      currentPage: Number(pageNumber),
+      totalPages,
+    };
+  }
+  
 async function createMultipleProduct(products){
     for(let product of products){
         await createProduct(product)
